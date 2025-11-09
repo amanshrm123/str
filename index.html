@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="index.css">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hi</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <h1>sTx</h1>
+
+  <input id="numberInput" type="number" inputmode="decimal" step="any" placeholder="Enter price">
+
+  <!-- window values as a table (keep 5% and also subdivide that 5% into 2%, 2% and 1%) -->
+  <table id="windows" aria-live="polite">
+    <thead>
+      <tr>
+        <th>Window</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Value - 5%</td>
+        <td><span id="win5">-</span></td>
+      </tr>
+
+      <!-- subdivided parts of the 5% (boxed) -->
+      <tr>
+        <td colspan="2">
+          <div class="subbox" role="group" aria-label="Subdivisions of 5 percent">
+            <table class="inner">
+              <tbody>
+                <tr>
+                  <td>Part A - 2%</td>
+                  <td><span id="win2a">-</span></td>
+                </tr>
+                <tr>
+                  <td>Part B - 2%</td>
+                  <td><span id="win2b">-</span></td>
+                </tr>
+                <tr>
+                  <td>Part C - 1%</td>
+                  <td><span id="win1">-</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Value - 10%</td>
+        <td><span id="win10">-</span></td>
+      </tr>
+      <tr>
+        <td>Value - 15%</td>
+        <td><span id="win15">-</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script src="index.js" defer></script>
+</body>
+</html>

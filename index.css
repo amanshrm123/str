@@ -1,0 +1,96 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    flex-direction: column; /* stack elements vertically so input sits below the h1 */
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #000;
+    background: #fff;
+}
+
+/* keep input unstyled (no input { ... } rules) */
+
+/* small spacing so the input sits clearly below the heading */
+h1 {
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+}
+
+/* table column format */
+#windows {
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  width: auto;
+}
+#windows th, #windows td {
+  padding: 6px 10px;
+  white-space: nowrap;
+  border: none;
+}
+
+/* first column: fixed width, left aligned */
+#windows th:first-child,
+#windows td:first-child {
+  width: 160px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* second column: right aligned numeric values, monospace */
+#windows th:last-child,
+#windows td:last-child {
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+/* specific window colors */
+#windows #win5 {
+  color: #f1c40f; /* yellow */
+}
+#windows #win10 {
+  color: #ff8c00; /* orange */
+}
+#windows #win15 {
+  color: #e74c3c; /* red */
+}
+
+/* subdivided 5% parts */
+#windows #win2a,
+#windows #win2b {
+  color: #f4d06f; /* light yellow */
+}
+#windows #win1 {
+  color: #ffd54f; /* 1% slightly different yellow */
+}
+
+/* box for the 5% subdivisions */
+.subbox {
+  border: 1px solid #e0dca8;
+  background: #fffbe6;
+  padding: 8px;
+  display: inline-block; /* shrink to contents */
+  margin-top: 6px;
+  border-radius: 6px;
+}
+
+/* inner table inside the box */
+.subbox .inner td {
+  padding: 4px 10px;
+  white-space: nowrap;
+  border: none;
+}
+
+/* keep numeric column right aligned inside the box */
+.subbox .inner td:last-child {
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+/* adjust spacing so the box aligns with main table values */
+#windows td[colspan="2"] {
+  padding: 0;
+}
