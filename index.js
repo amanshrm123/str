@@ -6,6 +6,11 @@ const out1  = document.getElementById('win1');
 const out10 = document.getElementById('win10');
 const out15 = document.getElementById('win15');
 
+const input2 = document.getElementById('numberInput2');
+const qty5  = document.getElementById('qty5');
+const qty10 = document.getElementById('qty10');
+const qty15 = document.getElementById('qty15');
+
 function formatNum(n) {
   if (!Number.isFinite(n)) return '-';
   return (Math.round(n * 100) / 100).toString();
@@ -50,3 +55,28 @@ input.addEventListener("input", function (e) {
   out10.textContent = formatNum(num * (1 - 0.10));
   out15.textContent = formatNum(num * (1 - 0.15));
 });
+
+function updateQuantityWindows() {
+  if (!input2) return;
+  const v = input2.value;
+  if (v === '' || v === '.') {
+    qty5.textContent = qty10.textContent = qty15.textContent = '-';
+    return;
+  }
+  const n = parseFloat(v);
+  if (!Number.isFinite(n)) {
+    qty5.textContent = qty10.textContent = qty15.textContent = '-';
+    return;
+  }
+  qty5.textContent  = formatNum(n * (1 - 0.05));
+  qty10.textContent = formatNum(n * (1 - 0.10));
+  qty15.textContent = formatNum(n * (1 - 0.15));
+}
+
+// attach listener for the quantity input
+if (input2) {
+  input2.addEventListener('input', updateQuantityWindows);
+}
+
+// call once to initialize (in case of prefilled values)
+updateQuantityWindows();

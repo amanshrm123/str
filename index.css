@@ -94,3 +94,18 @@ h1 {
 #windows td[colspan="2"] {
   padding: 0;
 }
+
+/* place the two inputs side-by-side */
+.inputs-row {
+  display: flex;
+  gap: 2rem; /* increased spacing between inputs (was 0.5rem) */
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* keep inputs visually unstyled but ensure reasonable size */
+.inputs-row input[type="number"] {
+  min-width: 180px;
+  padding: 6px 8px;
+  font-size: 1rem;
+}
