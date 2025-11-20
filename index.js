@@ -68,9 +68,15 @@ function updateQuantityWindows() {
     qty5.textContent = qty10.textContent = qty15.textContent = '-';
     return;
   }
-  qty5.textContent  = formatNum(n * (1 - 0.05));
-  qty10.textContent = formatNum(n * (1 - 0.10));
-  qty15.textContent = formatNum(n * (1 - 0.15));
+    const qty2a = document.getElementById('qty2a');
+  // set qty5 to 40% of the provided quantity (numberInput2)
+  qty5.textContent  = formatNum(n * 0.40);
+    // qty2a = floor(15% of qty5)
+    if (qty2a) qty2a.textContent = String(Math.floor((n * 0.40) * 0.4));
+    if (qty2b) qty2b.textContent = String(Math.floor((n * 0.40) * 0.4));
+    if (qty1) qty1.textContent = String(Math.floor((n * 0.40) * 0.2));
+  qty10.textContent = formatNum(n * 0.40);
+  qty15.textContent = formatNum(n * 0.20);
 }
 
 // attach listener for the quantity input
