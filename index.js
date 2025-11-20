@@ -86,3 +86,36 @@ if (input2) {
 
 // call once to initialize (in case of prefilled values)
 updateQuantityWindows();
+
+// --- Theme toggle (dark / light) ---
+const themeToggle = document.getElementById('themeToggle');
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === 'dark') {
+    root.classList.add('dark');
+    if (themeToggle) themeToggle.checked = true;
+  } else {
+    root.classList.remove('dark');
+    if (themeToggle) themeToggle.checked = false;
+  }
+}
+
+// read saved preference or system preference
+const savedTheme = (function () {
+  try { return localStorage.getItem('theme'); } catch (e) { return null; }
+})();
+if (savedTheme) {
+  applyTheme(savedTheme);
+} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  applyTheme('dark');
+} else {
+  applyTheme('light');
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('change', function (e) {
+    const t = e.target.checked ? 'dark' : 'light';
+    applyTheme(t);
+    try { localStorage.setItem('theme', t); } catch (err) { /* ignore */ }
+  });
+}
