@@ -8,16 +8,26 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <h1>sTx</h1>
+  <div class="app-card">
+    <header class="app-header">
+      <h1>sTx</h1>
+    </header>
 
-  <!-- inputs placed side-by-side -->
-  <div class="inputs-row" role="group" aria-label="Inputs">
-    <input id="numberInput" type="number" inputmode="decimal" step="any" placeholder="Enter price">
-    <input id="numberInput2" type="number" inputmode="decimal" step="any" placeholder="Enter quantity">
-  </div>
+    <!-- inputs placed side-by-side -->
+    <div class="inputs-row" role="group" aria-label="Inputs">
+      <label class="input-label">
+        <span class="label-text">Price</span>
+        <input id="numberInput" type="number" inputmode="decimal" step="any" placeholder="Enter price">
+      </label>
 
-  <!-- window table (now includes Quantity column) -->
-  <table id="windows" aria-live="polite">
+      <label class="input-label">
+        <span class="label-text">Quantity</span>
+        <input id="numberInput2" type="number" inputmode="decimal" step="any" placeholder="Enter quantity">
+      </label>
+    </div>
+
+    <!-- window table (now includes Quantity column) -->
+    <table id="windows" aria-live="polite">
     <thead>
       <tr>
         <th>Window</th>
