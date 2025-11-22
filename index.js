@@ -5,6 +5,8 @@ const out2b = document.getElementById('win2b');
 const out1  = document.getElementById('win1');
 const out10 = document.getElementById('win10');
 const out15 = document.getElementById('win15');
+const out3_10 = document.getElementById('win3_10');
+const out2_10 = document.getElementById('win2_10');
 
 const input2 = document.getElementById('numberInput2');
 const qty5  = document.getElementById('qty5');
@@ -52,8 +54,16 @@ input.addEventListener("input", function (e) {
   out1.textContent  = formatNum(part3);
 
   // other windows remain based on original input
-  out10.textContent = formatNum(num * (1 - 0.10));
+  const base10 = num * (1 - 0.10);
+  out10.textContent = formatNum(base10);
   out15.textContent = formatNum(num * (1 - 0.15));
+
+  // subdivisions for 10%: compute relative to the 5% window value (`win5`)
+  // Part A is 3% reduction of the 5% window, Part B is then 2% of Part A
+  const sub10_a = base5 * (1 - 0.03);
+  const sub10_b = sub10_a * (1 - 0.02);
+  if (out3_10) out3_10.textContent = formatNum(sub10_a);
+  if (out2_10) out2_10.textContent = formatNum(sub10_b);
 });
 
 function updateQuantityWindows() {
@@ -69,14 +79,23 @@ function updateQuantityWindows() {
     return;
   }
     const qty2a = document.getElementById('qty2a');
-  // set qty5 to 40% of the provided quantity (numberInput2)
-  qty5.textContent  = formatNum(n * 0.40);
-    // qty2a = floor(15% of qty5)
-    if (qty2a) qty2a.textContent = String(Math.floor((n * 0.40) * 0.4));
-    if (qty2b) qty2b.textContent = String(Math.floor((n * 0.40) * 0.4));
-    if (qty1) qty1.textContent = String(Math.floor((n * 0.40) * 0.2));
-  qty10.textContent = formatNum(n * 0.40);
-  qty15.textContent = formatNum(n * 0.20);
+    const qty3_10 = document.getElementById('qty3_10');
+    const qty2_10 = document.getElementById('qty2_10');
+    // set qty5 to 40% of the provided quantity (numberInput2)
+    const qty5Val = n * 0.40;
+    qty5.textContent  = formatNum(qty5Val);
+      // qty2a = floor(40% split of qty5)
+    if (qty2a) qty2a.textContent = String(Math.floor(qty5Val * 0.4));
+    if (qty2b) qty2b.textContent = String(Math.floor(qty5Val * 0.4));
+    if (qty1) qty1.textContent = String(Math.floor(qty5Val * 0.2));
+    const qty10Val = n * 0.40;
+    qty10.textContent = formatNum(qty10Val);
+    qty15.textContent = formatNum(n * 0.20);
+    // compute quantities for 10% subdivisions based on the remaining quantity
+    // remainder = total input quantity - qty5
+    const remainder = Math.max(0, n - qty5Val);
+    if (qty3_10) qty3_10.textContent = String(Math.floor(remainder * 0.3));
+    if (qty2_10) qty2_10.textContent = String(Math.floor(remainder * 0.2));
 }
 
 // attach listener for the quantity input
