@@ -1,140 +1,137 @@
-const input = document.getElementById('numberInput');
-const out5  = document.getElementById('win5');
-const out2a = document.getElementById('win2a');
-const out2b = document.getElementById('win2b');
-const out1  = document.getElementById('win1');
-const out10 = document.getElementById('win10');
-const out15 = document.getElementById('win15');
-const out3_10 = document.getElementById('win3_10');
-const out2_10 = document.getElementById('win2_10');
-
-const input2 = document.getElementById('numberInput2');
-const qty5  = document.getElementById('qty5');
-const qty10 = document.getElementById('qty10');
-const qty15 = document.getElementById('qty15');
-
-function formatNum(n) {
-  if (!Number.isFinite(n)) return '-';
-  return (Math.round(n * 100) / 100).toString();
-}
-
-input.addEventListener("input", function (e) {
-  let value = e.target.value;
-
-  if (!/^\d*(\.\d{0,2})?$/.test(value)) {
-    e.target.value = value.slice(0, -1);
-    value = e.target.value;
-  }
-
-  if (value === '' || value === '.' ) {
-    out5.textContent = out2a.textContent = out2b.textContent = out1.textContent = out10.textContent = out15.textContent = '-';
-    return;
-  }
-
-  const num = parseFloat(value);
-  if (!Number.isFinite(num)) {
-    out5.textContent = out2a.textContent = out2b.textContent = out1.textContent = out10.textContent = out15.textContent = '-';
-    return;
-  }
-
-  // main 5% window (base for subdivision)
-  const base5 = num * (1 - 0.05);
-  out5.textContent = formatNum(base5);
-
-  // chained subdivision:
-  // part1 is computed from the original input (subtract 2% of input)
-  // part2 is computed from part1 (subtract 2% of part1)
-  // part3 is computed from part2 (subtract 1% of part2)
-  const part1 = num * (1 - 0.02);
-  const part2 = part1 * (1 - 0.02);
-  const part3 = part2 * (1 - 0.01);
-
-  out2a.textContent = formatNum(part1);
-  out2b.textContent = formatNum(part2);
-  out1.textContent  = formatNum(part3);
-
-  // other windows remain based on original input
-  const base10 = num * (1 - 0.10);
-  out10.textContent = formatNum(base10);
-  out15.textContent = formatNum(num * (1 - 0.15));
-
-  // subdivisions for 10%: compute relative to the 5% window value (`win5`)
-  // Part A is 3% reduction of the 5% window, Part B is then 2% of Part A
-  const sub10_a = base5 * (1 - 0.03);
-  const sub10_b = sub10_a * (1 - 0.02);
-  if (out3_10) out3_10.textContent = formatNum(sub10_a);
-  if (out2_10) out2_10.textContent = formatNum(sub10_b);
-});
-
-function updateQuantityWindows() {
-  if (!input2) return;
-  const v = input2.value;
-  if (v === '' || v === '.') {
-    qty5.textContent = qty10.textContent = qty15.textContent = '-';
-    return;
-  }
-  const n = parseFloat(v);
-  if (!Number.isFinite(n)) {
-    qty5.textContent = qty10.textContent = qty15.textContent = '-';
-    return;
-  }
-    const qty2a = document.getElementById('qty2a');
-    const qty3_10 = document.getElementById('qty3_10');
-    const qty2_10 = document.getElementById('qty2_10');
-    // set qty5 to 40% of the provided quantity (numberInput2)
-    const qty5Val = n * 0.40;
-    qty5.textContent  = formatNum(qty5Val);
-      // qty2a = floor(40% split of qty5)
-    if (qty2a) qty2a.textContent = String(Math.floor(qty5Val * 0.4));
-    if (qty2b) qty2b.textContent = String(Math.floor(qty5Val * 0.4));
-    if (qty1) qty1.textContent = String(Math.floor(qty5Val * 0.2));
-    const qty10Val = n * 0.40;
-    qty10.textContent = formatNum(qty10Val);
-    qty15.textContent = formatNum(n * 0.20);
-    // compute quantities for 10% subdivisions based on the remaining quantity
-    // remainder = total input quantity - qty5
-    const remainder = Math.max(0, n - qty5Val);
-    if (qty3_10) qty3_10.textContent = String(Math.floor(remainder * 0.3));
-    if (qty2_10) qty2_10.textContent = String(Math.floor(remainder * 0.2));
-}
-
-// attach listener for the quantity input
-if (input2) {
-  input2.addEventListener('input', updateQuantityWindows);
-}
-
-// call once to initialize (in case of prefilled values)
-updateQuantityWindows();
-
-// --- Theme toggle (dark / light) ---
-const themeToggle = document.getElementById('themeToggle');
-function applyTheme(theme) {
-  const root = document.documentElement;
-  if (theme === 'dark') {
-    root.classList.add('dark');
-    if (themeToggle) themeToggle.checked = true;
-  } else {
-    root.classList.remove('dark');
-    if (themeToggle) themeToggle.checked = false;
-  }
-}
-
-// read saved preference or system preference
-const savedTheme = (function () {
-  try { return localStorage.getItem('theme'); } catch (e) { return null; }
-})();
-if (savedTheme) {
-  applyTheme(savedTheme);
-} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  applyTheme('dark');
-} else {
-  applyTheme('light');
-}
-
-if (themeToggle) {
-  themeToggle.addEventListener('change', function (e) {
-    const t = e.target.checked ? 'dark' : 'light';
-    applyTheme(t);
-    try { localStorage.setItem('theme', t); } catch (err) { /* ignore */ }
-  });
-}
+<link rel="stylesheet" href="index.css">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stx App</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="card-slider">
+    <button class="arrow arrow-left" aria-label="Previous card">&#8592;</button>
+    <div class="cards">
+      <!-- Card 1: Current Project -->
+      <section class="card card-1">
+        <div class="app-card">
+          <header class="app-header">
+            <div class="spacer" aria-hidden="true"></div>
+            <h1>sTx</h1>
+            <div class="theme-toggle">
+              <label class="switch" title="Toggle dark theme">
+                <input id="themeToggle" type="checkbox" aria-label="Toggle dark theme">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </header>
+          <div class="inputs-row" role="group" aria-label="Inputs">
+            <label class="input-label">
+              <span class="label-text">Price</span>
+              <input id="numberInput" type="number" inputmode="decimal" step="any" placeholder="Enter price">
+            </label>
+            <label class="input-label">
+              <span class="label-text">Quantity</span>
+              <input id="numberInput2" type="number" inputmode="decimal" step="any" placeholder="Enter quantity">
+            </label>
+          </div>
+          <table id="windows" aria-live="polite">
+            <thead>
+              <tr>
+                <th>Window</th>
+                <th>Value</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Value - 5%</td>
+                <td><span id="win5">-</span></td>
+                <td><span id="qty5">-</span></td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <div class="subbox" role="group" aria-label="Subdivisions of 5 percent">
+                    <table class="inner">
+                      <tbody>
+                        <tr>
+                          <td>Part A - 2%</td>
+                          <td><span id="win2a">-</span></td>
+                          <td><span id="qty2a">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Part B - 2%</td>
+                          <td><span id="win2b">-</span></td>
+                          <td><span id="qty2b">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Part C - 1%</td>
+                          <td><span id="win1">-</span></td>
+                          <td><span id="qty1">-</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Value - 10%</td>
+                <td><span id="win10">-</span></td>
+                <td><span id="qty10">-</span></td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <div class="subbox" role="group" aria-label="Subdivisions of 10 percent">
+                    <table class="inner">
+                      <tbody>
+                        <tr>
+                          <td>Part A - 3%</td>
+                          <td><span id="win3_10">-</span></td>
+                          <td><span id="qty3_10">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Part B - 2%</td>
+                          <td><span id="win2_10">-</span></td>
+                          <td><span id="qty2_10">-</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Value - 15%</td>
+                <td><span id="win15">-</span></td>
+                <td><span id="qty15">-</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- Card 2: Sample Project -->
+      <section class="card card-2">
+        <div class="app-card">
+          <header class="app-header">
+            <div class="spacer" aria-hidden="true"></div>
+            <h1>Project 2</h1>
+            <div style="width:36px"></div>
+          </header>
+          <p style="margin:1.5rem 0;">This is a placeholder for another project. You can add any content here.</p>
+        </div>
+      </section>
+      <!-- Card 3: Sample Project -->
+      <section class="card card-3">
+        <div class="app-card">
+          <header class="app-header">
+            <div class="spacer" aria-hidden="true"></div>
+            <h1>Project 3</h1>
+            <div style="width:36px"></div>
+          </header>
+          <p style="margin:1.5rem 0;">This is a placeholder for a third project. Add your app or dashboard here.</p>
+        </div>
+      </section>
+    </div>
+    <button class="arrow arrow-right" aria-label="Next card">&#8594;</button>
+  </div>
+  <script src="index.js" defer></script>
+</body>
+</html>
