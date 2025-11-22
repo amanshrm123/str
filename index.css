@@ -316,7 +316,15 @@ body {
   .card-slider { max-width: 100vw; }
 }
 
-/* hide arrow buttons on small / touch devices (use swipe instead) */
+/* on small / touch devices show faint arrows (swipe is primary) */
 @media (max-width: 720px) {
-  .arrow { display: none; }
+  .arrow {
+    display: inline-flex;
+    opacity: 0.16; /* very light, subtle */
+    padding: 6px 10px;
+    font-size: 1.1rem;
+    box-shadow: none;
+    background: rgba(0,0,0,0.06);
+    color: rgba(255,255,255,0.85);
+  }
 }
